@@ -1,0 +1,19 @@
+services:
+  money_manager_pg:
+    container_name: money_manager_pg
+    image: postgres:latest
+    restart: on-failure
+    volumes:
+      - /postgres/money_manager/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
+    secrets:
+      - db-password
+secrets:
+  db-password:
+    file: secrets/db-password.txt
+volumes:
+  db_data: null
+  uploads: null

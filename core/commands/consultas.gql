@@ -1,0 +1,136 @@
+query Categories {
+  allCategories {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
+}
+
+query Account {
+  allAccounts {
+    edges {
+      node {
+        description
+        id
+        name
+        users {
+          edges {
+            node {
+              dateJoined
+              email
+              firstName
+              id
+              isActive
+              isStaff
+              isSuperuser
+              lastLogin
+              lastName
+              password
+              phoneNumber
+              username
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query Users {
+  allUsers {
+    edges {
+      node {
+        dateJoined
+        email
+        firstName
+        id
+        isActive
+        isStaff
+        isSuperuser
+        lastLogin
+        lastName
+        password
+        phoneNumber
+        username
+      }
+    }
+  }
+}
+
+mutation AddCategory {
+  createCategory(name: "Nueva Categoria") {
+    category {
+      id
+      name
+    }
+  }
+}
+
+mutation UpdateCategory {
+  updateCategory(id: 1, name: "Categoría Actualizada 3") {
+    category {
+      id
+      name
+    }
+  }
+}
+
+mutation DeleteCategory {
+  deleteCategory(id: 2) {
+    success
+  }
+}
+
+mutation DeleteCategoryByName {
+  deleteCategoryByName(name: "Nueva Categoria") {
+    success
+  }
+}
+
+mutation CreateCustomUser {
+  createCustomUser(username: "johndoe", email: "john@example.com", password: "password123") {
+    user {
+      id
+      username
+      email
+    }
+  }
+}
+
+mutation UpdateCustomUser {
+  updateCustomUser(id: 1, username: "johnny", email: "johnny@example.com", password: "newpassword123") {
+    user {
+      id
+      username
+      email
+    }
+  }
+}
+
+mutation DeleteCustomUser {
+  deleteCustomUser(id: 1) {
+    success
+  }
+}
+
+mutation DeleteCustomUserByUsername {
+  deleteCustomUserByUsername(username: "exampleUser") {
+    success
+  }
+}
+
+mutation AddAccount {
+  createAccount(name: "New Account", userIds: [1, 2]) {
+    account {
+      id
+      name
+      users {
+        id
+        username
+      }
+    }
+  }
+}

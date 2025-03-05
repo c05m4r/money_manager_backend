@@ -1,0 +1,25 @@
+sudo apt update
+sudo apt install python-pip python-dev libpq-dev postgresql postgresql-contrib nginx curl
+PGPASSWORD=postgres psql -U postgres -h localhost -p 5432 -c "CREATE DATABASE money_manager;"
+uv init money_manager_backend
+cd money_manager_backend/
+uv add --dev django-debug-toolbar
+uv add --dev pytest
+uv add Faker
+uv add ruff
+uv add django
+uv add django-filter
+uv add graphene-django
+uv add gunicorn psycopg2-binary
+uv run django-admin startproject core .
+uv run manage.py startapp access
+uv run manage.py startapp accounts
+uv run manage.py startapp categories
+uv run manage.py startapp transactions
+uv run manage.py startapp custom_user
+uv run manage.py makemigrations
+uv run manage.py migrate
+uv run manage.py createsuperuser
+uv run manage.py runserver 8001
+uv run python generate_data.py
+uv tool install mkdocs --with mkdocs-material

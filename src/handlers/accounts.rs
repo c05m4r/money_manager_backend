@@ -5,6 +5,7 @@ use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, Condition, EntityTrait, PaginatorTrait,
     QueryFilter,
 };
+use sea_orm::sea_query::Expr;
 use serde_json::json;
 use uuid::Uuid;
 
@@ -190,6 +191,7 @@ pub async fn update(
     authorize_action(&state, &auth, "accounts", "update", Some(current.user_uuid)).await?;
 
     let old_json = json!({"uuid": current.uuid, "name": current.name, "currency_code": current.currency_code, "user_uuid": current.user_uuid});
+    let current_user_uuid = current.user_uuid;
     let mut active: accounts::ActiveModel = current.into();
     if let Some(user_uuid) = &body.user_uuid {
         active.user_uuid = Set(*user_uuid);
@@ -204,6 +206,18 @@ pub async fn update(
         active.description = Set(Some(description.clone()));
     }
     if let Some(is_default) = body.is_default {
+        if is_default {
+            // Unset all other defaults for this user
+            let user_id = body.user_uuid.unwrap_or(current_user_uuid);
+            accounts::Entity::update_many()
+                .col_expr(accounts::Column::IsDefault, Expr::value(false))
+                .col_expr(accounts::Column::UpdatedAt, Expr::value(Utc::now()))
+                .filter(accounts::Column::UserUuid.eq(user_id))
+                .filter(accounts::Column::Uuid.ne(id))
+                .filter(accounts::Column::DeletedAt.is_null())
+                .exec(&state.db)
+                .await?;
+        }
         active.is_default = Set(is_default);
     }
     active.updated_at = Set(Utc::now());

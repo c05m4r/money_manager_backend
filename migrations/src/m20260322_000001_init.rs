@@ -200,6 +200,11 @@ impl MigrationTrait for Migration {
                 CREATE UNIQUE INDEX users_email_unique_active
                     ON users (email)
                     WHERE deleted_at IS NULL;
+
+                DROP INDEX IF EXISTS accounts_one_default_per_user;
+                CREATE UNIQUE INDEX accounts_one_default_per_user
+                    ON accounts (user_uuid)
+                    WHERE is_default = true AND deleted_at IS NULL;
                 "#,
             )
             .await?;

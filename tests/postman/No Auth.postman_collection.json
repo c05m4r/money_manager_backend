@@ -1,0 +1,1417 @@
+{
+  "info": {
+    "_postman_id": "9a4e5147-73d5-4b52-b267-ce545e666d48",
+    "name": "No Auth",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25814545"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /auth/resend-verification-email - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/resend-verification-email",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "resend-verification-email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /auth/verify-email - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/verify-email?token={{invalid_token}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "verify-email"
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "{{invalid_token}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "PATCH /users/{uuid} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{{user_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /users/{uuid} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/{{user_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /users/{uuid} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/{{user_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Currencies",
+      "item": [
+        {
+          "name": "POST /currencies - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"ZZZ\",\n  \"name\": \"No Auth Currency\",\n  \"symbol\": \"$\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/currencies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /currencies - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"ZZZ\",\n  \"name\": \"No Auth Currency\",\n  \"symbol\": \"$\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/currencies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /currencies/{code} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Currency\",\n  \"symbol\": \"$\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_code}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_code}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /currencies/{code} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Currency\",\n  \"symbol\": \"$\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_code}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_code}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /currencies/{code} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_code}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_code}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /currencies/{code} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_code}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_code}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "POST /accounts - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_uuid\": \"{{user_uuid}}\",\n  \"name\": \"No Auth Wallet\",\n  \"currency_code\": \"USD\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /accounts - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_uuid\": \"{{user_uuid}}\",\n  \"name\": \"No Auth Wallet\",\n  \"currency_code\": \"USD\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /accounts/{uuid} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Wallet\",\n  \"currency_code\": \"USD\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts/{{account_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                "{{account_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /accounts/{uuid} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Wallet\",\n  \"currency_code\": \"USD\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts/{{account_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                "{{account_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /accounts/{uuid} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/{{account_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                "{{account_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /accounts/{uuid} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/accounts/{{account_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                "{{account_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "POST /categories - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_uuid\": \"{{user_uuid}}\",\n  \"name\": \"No Auth Category\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /categories - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_uuid\": \"{{user_uuid}}\",\n  \"name\": \"No Auth Category\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /categories/{uuid} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Category\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /categories/{uuid} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Category\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /categories/{uuid} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /categories/{uuid} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transaction Types",
+      "item": [
+        {
+          "name": "POST /transaction-types - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"No Auth Type\",\n  \"code\": \"NAT_01\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transaction-types",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /transaction-types - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"No Auth Type\",\n  \"code\": \"NAT_01\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transaction-types",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /transaction-types/{uuid} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Type\",\n  \"code\": \"NAT_02\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transaction-types/{{transaction_type_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types",
+                "{{transaction_type_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /transaction-types/{uuid} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Type\",\n  \"code\": \"NAT_02\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transaction-types/{{transaction_type_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types",
+                "{{transaction_type_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /transaction-types/{uuid} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transaction-types/{{transaction_type_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types",
+                "{{transaction_type_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /transaction-types/{uuid} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transaction-types/{{transaction_type_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types",
+                "{{transaction_type_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "POST /transactions - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"150.00\",\n  \"description\": \"No auth transaction\",\n  \"transaction_date\": \"2026-03-22T00:00:00Z\",\n  \"type_uuid\": \"{{transaction_type_uuid}}\",\n  \"category_uuid\": \"{{category_uuid}}\",\n  \"source_account_uuid\": \"{{account_uuid}}\",\n  \"target_account_uuid\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /transactions - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"150.00\",\n  \"description\": \"No auth transaction\",\n  \"transaction_date\": \"2026-03-22T00:00:00Z\",\n  \"type_uuid\": \"{{transaction_type_uuid}}\",\n  \"category_uuid\": \"{{category_uuid}}\",\n  \"source_account_uuid\": \"{{account_uuid}}\",\n  \"target_account_uuid\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /transactions/{uuid} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated no auth transaction\",\n  \"amount\": \"175.50\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions/{{transaction_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "{{transaction_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /transactions/{uuid} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated no auth transaction\",\n  \"amount\": \"175.50\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions/{{transaction_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "{{transaction_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /transactions/{uuid} - No Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transactions/{{transaction_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "{{transaction_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /transactions/{uuid} - Invalid Token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalid_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transactions/{{transaction_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "{{transaction_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+          "const json = pm.response.json();",
+          "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8080/api/v1"
+    }
+  ]
+}

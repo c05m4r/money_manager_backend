@@ -1,0 +1,15 @@
+[package]
+name = "seed_defaults"
+version = "0.1.0"
+edition = "2024"
+authors = ["Marcos Gabriel Miller"]
+license = "GPL-3.0"
+
+[lib]
+name = "seed_defaults"
+path = "src/lib.rs"
+
+[dependencies]
+chrono = { version = "0.4.44", features = ["serde"] }
+sea-orm = { version = "1.1.19", features = ["sqlx-postgres", "runtime-tokio-rustls", "chrono", "with-uuid"] }
+uuid = { version = "1.22", features = ["v7", "serde"] }

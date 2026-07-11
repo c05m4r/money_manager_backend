@@ -1,0 +1,1956 @@
+{
+  "info": {
+    "_postman_id": "c246384c-4740-4393-853f-e7c4e46144e0",
+    "name": "Money Manager Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25814545"
+  },
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('health payload', function () { pm.expect(json.status).to.eql('healthy'); pm.expect(json.database).to.eql('up'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', function () { pm.response.to.have.status(201); });",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('user_uuid', json.uuid);",
+                  "pm.test('user uuid saved', function () { pm.expect(pm.collectionVariables.get('user_uuid')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{create_user_email}}\",\n  \"password\": \"{{create_user_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User CONFLICT",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 409 Conflict', function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "",
+                  "pm.test('Error message is correct', function () {",
+                  "    pm.expect(json.error).to.eql(\"CONFLICT\");",
+                  "    pm.expect(json.message).to.eql(\"Email already exists\");",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201 && json.uuid) {",
+                  "    pm.collectionVariables.set('user_uuid', json.uuid);",
+                  "    ",
+                  "    pm.test('User UUID saved successfully', function () {",
+                  "        pm.expect(pm.collectionVariables.get('user_uuid')).to.be.a('string').and.not.empty;",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{create_user_email}}\",\n  \"password\": \"{{create_user_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('auth_token', json.token);",
+                  "pm.collectionVariables.set('user_uuid', json.user.uuid);",
+                  "pm.test('token saved', function () { pm.expect(pm.collectionVariables.get('auth_token')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"{{user_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login from New IP (Audit Email)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('auth_token', json.token);",
+                  "pm.test('token saved', function () { pm.expect(pm.collectionVariables.get('auth_token')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-forwarded-for",
+                "value": "{{audit_login_ip}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{login_username}}\",\n  \"password\": \"{{user_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('generic message returned', function () { pm.expect(json.message).to.eql('If the account exists, password reset instructions have been sent'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user_email}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/forgot-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "forgot-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password (Audit Email)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('message is correct', function () { pm.expect(json.message).to.eql('Password changed successfully'); });",
+                  "pm.collectionVariables.set('user_password', pm.collectionVariables.get('new_user_password'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_password\": \"{{user_password}}\",\n  \"new_password\": \"{{new_user_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/change-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "change-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resend Verification Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('verification message is present', function () { pm.expect(json.message).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/resend-verification-email",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "resend-verification-email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login UNAUTHORIZED bad password wrong",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"NotExistPassword2026!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login UNAUTHORIZED bad email not exist",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status is 401', function () { pm.response.to.have.status(401); });",
+                  "const json = pm.response.json();",
+                  "pm.test('error is UNAUTHORIZED', function () { pm.expect(json.error).to.eql('UNAUTHORIZED'); });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"emailnotexist@moneymanager.com\",\n  \"password\": \"{{user_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const responseData = pm.response.json();",
+                  "",
+                  "pm.test('Message is \"Logged out\"', function () {",
+                  "    pm.expect(responseData.message).to.be.a('string').and.to.eql('Logged out');",
+                  "});",
+                  "",
+                  "pm.test('Auth token cleared from variables', function () {",
+                  "    pm.collectionVariables.unset('auth_token');",
+                  "    pm.expect(pm.collectionVariables.get('auth_token')).to.be.undefined;",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"{{user_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('pagination contract exists', function () { pm.expect(json).to.have.property('data'); pm.expect(json).to.have.property('meta'); pm.expect(json).to.have.property('links'); });"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users?page={{page}}&per_page={{per_page}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "per_page",
+                  "value": "{{per_page}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('user matches', function () { pm.expect(json.uuid).to.eql(pm.collectionVariables.get('user_uuid')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/{{user_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('username', json.username);",
+                  "pm.test('username updated', function () { pm.expect(json.username).to.eql(pm.collectionVariables.get('updated_username')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{updated_username}}\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{{user_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Currencies",
+      "item": [
+        {
+          "name": "Create Currency",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', function () { pm.response.to.have.status(201); });",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('currency_code', json.code);",
+                  "pm.test('currency code saved', function () { pm.expect(json.code).to.eql(pm.collectionVariables.get('currency_code')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"{{currency_code}}\",\n  \"name\": \"{{currency_name}}\",\n  \"symbol\": \"{{currency_symbol}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/currencies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Currencies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('has list payload', function () { const json = pm.response.json(); pm.expect(json.data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/currencies?page={{page}}&per_page={{per_page}}&search={{currency_code}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "per_page",
+                  "value": "{{per_page}}"
+                },
+                {
+                  "key": "search",
+                  "value": "{{currency_code}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Currency",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('currency matches', function () { pm.expect(json.code).to.eql(pm.collectionVariables.get('currency_code')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_code}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_code}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Currency",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('currency updated', function () { pm.expect(json.name).to.eql(pm.collectionVariables.get('updated_currency_name')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{updated_currency_name}}\",\n  \"symbol\": \"{{currency_symbol}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_code}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_code}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Create Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', function () { pm.response.to.have.status(201); });",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('account_uuid', json.uuid);",
+                  "pm.test('account uuid saved', function () { pm.expect(json.uuid).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_uuid\": \"{{user_uuid}}\",\n  \"name\": \"{{account_name}}\",\n  \"currency_code\": \"{{currency_code}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Accounts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('accounts data exists', function () { pm.expect(json.data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts?page={{page}}&per_page={{per_page}}&user_uuid={{user_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "per_page",
+                  "value": "{{per_page}}"
+                },
+                {
+                  "key": "user_uuid",
+                  "value": "{{user_uuid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('account matches', function () { pm.expect(json.uuid).to.eql(pm.collectionVariables.get('account_uuid')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/{{account_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                "{{account_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('account updated', function () { pm.expect(json.name).to.eql(pm.collectionVariables.get('updated_account_name')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{updated_account_name}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts/{{account_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                "{{account_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Create Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', function () { pm.response.to.have.status(201); });",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('category_uuid', json.uuid);",
+                  "pm.test('category uuid saved', function () { pm.expect(json.uuid).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_uuid\": \"{{user_uuid}}\",\n  \"name\": \"{{category_name}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Categories",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('categories data exists', function () { pm.expect(json.data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categories?page={{page}}&per_page={{per_page}}&user_uuid={{user_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "per_page",
+                  "value": "{{per_page}}"
+                },
+                {
+                  "key": "user_uuid",
+                  "value": "{{user_uuid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('category matches', function () { pm.expect(json.uuid).to.eql(pm.collectionVariables.get('category_uuid')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('category updated', function () { pm.expect(json.name).to.eql(pm.collectionVariables.get('updated_category_name')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{updated_category_name}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transaction Types",
+      "item": [
+        {
+          "name": "Create Transaction Type",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', function () { pm.response.to.have.status(201); });",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('transaction_type_uuid', json.uuid);",
+                  "pm.test('transaction type uuid saved', function () { pm.expect(json.uuid).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{transaction_type_name}}\",\n  \"code\": \"{{transaction_type_code}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transaction-types",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Transaction Types",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('transaction types data exists', function () { pm.expect(json.data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transaction-types?page={{page}}&per_page={{per_page}}&search={{transaction_type_code}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "per_page",
+                  "value": "{{per_page}}"
+                },
+                {
+                  "key": "search",
+                  "value": "{{transaction_type_code}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Transaction Type",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('transaction type matches', function () { pm.expect(json.uuid).to.eql(pm.collectionVariables.get('transaction_type_uuid')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transaction-types/{{transaction_type_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types",
+                "{{transaction_type_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Transaction Type",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('transaction type updated', function () { pm.expect(json.name).to.eql(pm.collectionVariables.get('updated_transaction_type_name')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{updated_transaction_type_name}}\",\n  \"code\": \"{{updated_transaction_type_code}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transaction-types/{{transaction_type_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types",
+                "{{transaction_type_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Create Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', function () { pm.response.to.have.status(201); });",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('transaction_uuid', json.uuid);",
+                  "pm.test('transaction uuid saved', function () { pm.expect(json.uuid).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"{{transaction_amount}}\",\n  \"description\": \"{{transaction_description}}\",\n  \"transaction_date\": \"{{transaction_date}}\",\n  \"type_uuid\": \"{{transaction_type_uuid}}\",\n  \"category_uuid\": \"{{category_uuid}}\",\n  \"source_account_uuid\": \"{{account_uuid}}\",\n  \"target_account_uuid\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Transactions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('transactions data exists', function () { pm.expect(json.data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transactions?page={{page}}&per_page={{per_page}}&user_uuid={{user_uuid}}&source_account_uuid={{account_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "per_page",
+                  "value": "{{per_page}}"
+                },
+                {
+                  "key": "user_uuid",
+                  "value": "{{user_uuid}}"
+                },
+                {
+                  "key": "source_account_uuid",
+                  "value": "{{account_uuid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('transaction matches', function () { pm.expect(json.uuid).to.eql(pm.collectionVariables.get('transaction_uuid')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transactions/{{transaction_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "{{transaction_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('transaction updated', function () { pm.expect(json.amount).to.eql(pm.collectionVariables.get('updated_transaction_amount')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"{{updated_transaction_amount}}\",\n  \"description\": \"{{updated_transaction_description}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transactions/{{transaction_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "{{transaction_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Audit Logs",
+      "item": [
+        {
+          "name": "List Audit Logs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('audit logs data exists', function () { pm.expect(json.data).to.be.an('array'); });",
+                  "if (json.data.length > 0) { pm.collectionVariables.set('audit_log_uuid', json.data[0].uuid); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/audit-logs?page={{page}}&per_page={{per_page}}&user_uuid={{user_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "audit-logs"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "per_page",
+                  "value": "{{per_page}}"
+                },
+                {
+                  "key": "user_uuid",
+                  "value": "{{user_uuid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Audit Log",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('audit log matches', function () { pm.expect(json.uuid).to.eql(pm.collectionVariables.get('audit_log_uuid')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/audit-logs/{{audit_log_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "audit-logs",
+                "{{audit_log_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cleanup",
+      "item": [
+        {
+          "name": "Delete Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 204', function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transactions/{{transaction_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transactions",
+                "{{transaction_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Transaction Type",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 204', function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transaction-types/{{transaction_type_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction-types",
+                "{{transaction_type_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 204', function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 204', function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/accounts/{{account_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                "{{account_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Currency",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 204', function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_code}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_code}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 204', function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/{{user_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_uuid}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          "const runId = pm.collectionVariables.get('run_id') || Date.now().toString().slice(-6);",
+          "pm.collectionVariables.set('run_id', runId);",
+          "if (!pm.collectionVariables.get('user_email')) pm.collectionVariables.set('user_email', 'admin@moneymanager.com');",
+          "if (!pm.collectionVariables.get('username')) pm.collectionVariables.set('username', 'Marcos Miller');",
+          "if (!pm.collectionVariables.get('user_password')) pm.collectionVariables.set('user_password', 'ContraseniaSegura2026!');",
+          "if (!pm.collectionVariables.get('create_user_email')) pm.collectionVariables.set('create_user_email', `marcos.miller+${runId}@example.com`);",
+          "if (!pm.collectionVariables.get('create_user_password')) pm.collectionVariables.set('create_user_password', 'ContraseniaSegura2026!');",
+          "if (!pm.collectionVariables.get('updated_username')) pm.collectionVariables.set('updated_username', `updated_user_${runId}`);",
+          "if (!pm.collectionVariables.get('currency_code')) pm.collectionVariables.set('currency_code', `X${runId.slice(-2)}`);",
+          "if (!pm.collectionVariables.get('currency_name')) pm.collectionVariables.set('currency_name', `Test Currency ${runId}`);",
+          "if (!pm.collectionVariables.get('currency_symbol')) pm.collectionVariables.set('currency_symbol', '$');",
+          "if (!pm.collectionVariables.get('updated_currency_name')) pm.collectionVariables.set('updated_currency_name', `Updated Currency ${runId}`);",
+          "if (!pm.collectionVariables.get('account_name')) pm.collectionVariables.set('account_name', `Wallet ${runId}`);",
+          "if (!pm.collectionVariables.get('updated_account_name')) pm.collectionVariables.set('updated_account_name', `Updated Wallet ${runId}`);",
+          "if (!pm.collectionVariables.get('category_name')) pm.collectionVariables.set('category_name', `Category ${runId}`);",
+          "if (!pm.collectionVariables.get('updated_category_name')) pm.collectionVariables.set('updated_category_name', `Updated Category ${runId}`);",
+          "if (!pm.collectionVariables.get('transaction_type_name')) pm.collectionVariables.set('transaction_type_name', `Expense ${runId}`);",
+          "if (!pm.collectionVariables.get('transaction_type_code')) pm.collectionVariables.set('transaction_type_code', `EXP_${runId}`);",
+          "if (!pm.collectionVariables.get('updated_transaction_type_name')) pm.collectionVariables.set('updated_transaction_type_name', `Expense Updated ${runId}`);",
+          "if (!pm.collectionVariables.get('updated_transaction_type_code')) pm.collectionVariables.set('updated_transaction_type_code', `EXP_UP_${runId}`);",
+          "if (!pm.collectionVariables.get('transaction_amount')) pm.collectionVariables.set('transaction_amount', '150.00');",
+          "if (!pm.collectionVariables.get('updated_transaction_amount')) pm.collectionVariables.set('updated_transaction_amount', '175.50');",
+          "if (!pm.collectionVariables.get('transaction_description')) pm.collectionVariables.set('transaction_description', `Postman transaction ${runId}`);",
+          "if (!pm.collectionVariables.get('updated_transaction_description')) pm.collectionVariables.set('updated_transaction_description', `Updated transaction ${runId}`);",
+          "if (!pm.collectionVariables.get('transaction_date')) pm.collectionVariables.set('transaction_date', new Date().toISOString());",
+          "if (!pm.collectionVariables.get('page')) pm.collectionVariables.set('page', '1');",
+          "if (!pm.collectionVariables.get('per_page')) pm.collectionVariables.set('per_page', '20');"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8080/api/v1"
+    },
+    {
+      "key": "run_id",
+      "value": ""
+    },
+    {
+      "key": "page",
+      "value": "1"
+    },
+    {
+      "key": "per_page",
+      "value": "20"
+    },
+    {
+      "key": "user_email",
+      "value": "admin@moneymanager.com"
+    },
+    {
+      "key": "username",
+      "value": "Marcos Miller"
+    },
+    {
+      "key": "login_username",
+      "value": "default"
+    },
+    {
+      "key": "updated_username",
+      "value": ""
+    },
+    {
+      "key": "user_password",
+      "value": "ContraseniaSegura2026!"
+    },
+    {
+      "key": "new_user_password",
+      "value": "ContraseniaSuperSegura2027!"
+    },
+    {
+      "key": "audit_login_ip",
+      "value": "203.0.113.10"
+    },
+    {
+      "key": "create_user_email",
+      "value": ""
+    },
+    {
+      "key": "create_user_password",
+      "value": "ContraseniaSegura2026!"
+    },
+    {
+      "key": "user_uuid",
+      "value": ""
+    },
+    {
+      "key": "currency_code",
+      "value": ""
+    },
+    {
+      "key": "currency_name",
+      "value": ""
+    },
+    {
+      "key": "currency_symbol",
+      "value": "$"
+    },
+    {
+      "key": "updated_currency_name",
+      "value": ""
+    },
+    {
+      "key": "account_uuid",
+      "value": ""
+    },
+    {
+      "key": "account_name",
+      "value": ""
+    },
+    {
+      "key": "updated_account_name",
+      "value": ""
+    },
+    {
+      "key": "category_uuid",
+      "value": ""
+    },
+    {
+      "key": "category_name",
+      "value": ""
+    },
+    {
+      "key": "updated_category_name",
+      "value": ""
+    },
+    {
+      "key": "transaction_type_uuid",
+      "value": ""
+    },
+    {
+      "key": "transaction_type_name",
+      "value": ""
+    },
+    {
+      "key": "transaction_type_code",
+      "value": ""
+    },
+    {
+      "key": "updated_transaction_type_name",
+      "value": ""
+    },
+    {
+      "key": "updated_transaction_type_code",
+      "value": ""
+    },
+    {
+      "key": "transaction_uuid",
+      "value": ""
+    },
+    {
+      "key": "transaction_amount",
+      "value": "150.00"
+    },
+    {
+      "key": "updated_transaction_amount",
+      "value": "175.50"
+    },
+    {
+      "key": "transaction_description",
+      "value": ""
+    },
+    {
+      "key": "updated_transaction_description",
+      "value": ""
+    },
+    {
+      "key": "transaction_date",
+      "value": ""
+    },
+    {
+      "key": "audit_log_uuid",
+      "value": ""
+    },
+    {
+      "key": "auth_token",
+      "value": ""
+    }
+  ]
+}
